@@ -19,7 +19,7 @@
             function echo() { 
                 
                 $.ajax({
-                    url:'j_security_check',
+                    url:'resources/login',
                     type: 'POST',
                     data: { j_username: 'ryan', j_password: 'ryan' }
                 }).done(function(msg) { console.log('Data Saved: '+msg)});

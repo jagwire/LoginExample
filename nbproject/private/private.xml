@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/login/example/UserRecord.java</file>
+            <file>file:/Users/ryan/Development/LoginExample/web/index.jsp</file>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/login/resources/GenericResource.java</file>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/login/example/LoginExampleServlet.java</file>
+            <file>file:/Users/ryan/Development/LoginExample/web/WEB-INF/web.xml</file>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/login/resources/LoginResource.java</file>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/login/example/SessionRepository.java</file>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/StartupListener.java</file>
+            <file>file:/Users/ryan/Development/LoginExample/src/java/TestServerAuthModule.java</file>
+        </group>
     </open-files>
 </project-private>

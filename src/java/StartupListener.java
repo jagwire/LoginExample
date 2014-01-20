@@ -18,10 +18,12 @@ public class StartupListener implements ServletContextListener {
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
+        System.out.println("CONTEXT INITIALIZED!");
         AuthConfigFactory.getFactory().registerConfigProvider(new TestAuthConfigProvider(), "HttpServlet", null, "The test");
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("CONTEXT DESTROYEDx!");
     }
 }

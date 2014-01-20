@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<sun-web-app>
-    <security-role-mapping>
-        <role-name>architect</role-name>
-        <group-name>architect</group-name>
-    </security-role-mapping>
-</sun-web-app>

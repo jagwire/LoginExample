@@ -1,5 +1,6 @@
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +17,11 @@ import javax.security.auth.message.callback.GroupPrincipalCallback;
 import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.StatusType;
+import login.example.SessionRepository;
+import login.example.UserRecord;
 
 /*
  * To change this template, choose Tools | Templates
@@ -27,6 +33,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author Ryan
  */
 class TestServerAuthModule implements ServerAuthModule {
+    private static final String HEADER_NAME = "EXAMPLE-AUTH";
     private CallbackHandler handler;
 
     public TestServerAuthModule() {
@@ -49,21 +56,45 @@ class TestServerAuthModule implements ServerAuthModule {
         // present and perform actual authentication, or in absence of those
         // ask the user in some way to authenticate.
 
-        // Here we just create the user and associated roles directly.
+        HttpServletRequest request = (HttpServletRequest)messageInfo.getRequestMessage();
+        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
+        String path = request.getContextPath();
+        String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
+        System.out.println("VALIDATING REQUEST FOR PATH: "+path+pathInfo);
+        
+        String userid = processRequestHeader(request);
+        
+        if(userid == null) {
+            //don't set any principals
+            return AuthStatus.SUCCESS;
+        } 
+        
+        String[] userGroups = getUserGroups(userid);
+        
+        setPrincipals(clientSubject, userid, userGroups);
+   
+        return AuthStatus.SUCCESS;
+    }
 
-        // Create a handler (kind of directive) to add the caller principal (AKA
+    private String[] getUserGroups(String userid) {
+        //TODO: query a database
+        return new String [] {"Admin"};
+    }
+    
+    private void setPrincipals(Subject clientSubject, String userid, String[] groups) {
+                // Create a handler (kind of directive) to add the caller principal (AKA
         // user principal) "test" (=basically user name, or user id)
         // This will be the name of the principal returned by e.g.
         // HttpServletRequest#getUserPrincipal
         CallerPrincipalCallback callerPrincipalCallback =
-                new CallerPrincipalCallback(clientSubject, "test");
+                new CallerPrincipalCallback(clientSubject, userid);
 
         // Create a handler to add the group (AKA role) "architect"
         // This is what e.g. HttpServletRequest#isUserInRole and @RolesAllowed
         // test for
         GroupPrincipalCallback groupPrincipalCallback =
                 new GroupPrincipalCallback(
-                clientSubject, new String[]{"architect"});
+                clientSubject, groups);
 
         // Execute the handlers we created above. This will typically add the
         // "test" principal and the "architect"
@@ -76,9 +107,7 @@ class TestServerAuthModule implements ServerAuthModule {
         } catch (UnsupportedCallbackException e) {
             e.printStackTrace();
         }
-        return AuthStatus.SUCCESS;
     }
-
     @Override
     public AuthStatus secureResponse(MessageInfo messageInfo, Subject serviceSubject) throws AuthException {
         return AuthStatus.SEND_SUCCESS;
@@ -86,5 +115,19 @@ class TestServerAuthModule implements ServerAuthModule {
 
     @Override
     public void cleanSubject(MessageInfo messageInfo, Subject subject) throws AuthException {
+    }
+
+    private String processRequestHeader(HttpServletRequest request) {
+        String token = request.getHeader(HEADER_NAME);
+        if(token == null || token.equals(" ") || token.equals("")) {
+            return null;
+        } else {
+            //user entity should exist somewhere in a map or key-value pair ala:
+            // token->userentity
+            System.out.println("FOUND HEADER: "+HEADER_NAME+"->"+token);
+            UserRecord record = SessionRepository.INSTANCE.getUserID(token);
+            return record.getUsername();
+            
+        }
     }
 }

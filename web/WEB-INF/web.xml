@@ -5,34 +5,24 @@
         <listener-class>StartupListener</listener-class>
     </listener>
     <servlet>
-        <servlet-name>LoginExampleServlet</servlet-name>
-        <jsp-file>index.jsp</jsp-file>
+        <servlet-name>Servlet Adapter</servlet-name>
+        <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+        <load-on-startup>1</load-on-startup>
     </servlet>
-    <security-constraint>
-        <display-name>SecurityConstraint</display-name>
-        <web-resource-collection>
-            <web-resource-name>Test</web-resource-name>
-            <description/>
-            <url-pattern>/*</url-pattern>
-        </web-resource-collection>
-        <auth-constraint>
-            <description/>
-            <role-name>architect</role-name>
-        </auth-constraint>
-        <user-data-constraint>
-            <description/>
-            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
-        </user-data-constraint>
-    </security-constraint>
-    <login-config>
-        <auth-method>FORM</auth-method>
-        <form-login-config>
-            <form-login-page>/index.jsp</form-login-page>
-            <form-error-page>/logonError.jsp</form-error-page>
-        </form-login-config>
-    </login-config>
+    <servlet-mapping>
+        <servlet-name>Servlet Adapter</servlet-name>
+        <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
     <security-role>
         <description/>
         <role-name>architect</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>User</role-name>
+    </security-role>
+    <security-role>
+        <description/>
+        <role-name>Admin</role-name>
     </security-role>
 </web-app>
