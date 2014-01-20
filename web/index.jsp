@@ -17,12 +17,23 @@
             });
             
             function echo() { 
+                var user = {username: 'jagwire', password: 'ryan'};
                 
                 $.ajax({
                     url:'resources/login',
                     type: 'POST',
-                    data: { j_username: 'ryan', j_password: 'ryan' }
-                }).done(function(msg) { console.log('Data Saved: '+msg)});
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    headers: { "TESTING_AUTH": "XXXXXXXX"},
+                    data: JSON.stringify(user),
+                    
+                })
+                .done(function(msg) { console.log('Data Saved: '+msg)})
+                .fail(function(xhr, status, error) {
+                            console.log("Error! Status: "+status+" error: "+error); 
+                            console.log("Silly Header: "+xhr.getResponseHeader("BLAH"));
+                    }
+                 );
                 console.log("SENDING POST!");
             }
         </script>

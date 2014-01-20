@@ -15,6 +15,7 @@ import javax.security.auth.message.MessagePolicy;
 import javax.security.auth.message.callback.CallerPrincipalCallback;
 import javax.security.auth.message.callback.GroupPrincipalCallback;
 import javax.security.auth.message.module.ServerAuthModule;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
@@ -61,12 +62,17 @@ class TestServerAuthModule implements ServerAuthModule {
         String path = request.getContextPath();
         String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
         System.out.println("VALIDATING REQUEST FOR PATH: "+path+pathInfo);
-        
+
         String userid = processRequestHeader(request);
 
-        if(userid == null) {
-            //don't set any principals
+        if (userid == null && pathInfo.contains("login")) {
+            System.out.println("SORRY!");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.setHeader("BLAH", "bloobloobloo");
+            response.addCookie(new Cookie("GhostsSay", "BOO!"));
             return AuthStatus.SUCCESS;
+            //don't set any principals
+//            return AuthStatus.SUCCESS;
         } 
         
         String[] userGroups = getUserGroups(userid);

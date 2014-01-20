@@ -15,7 +15,7 @@ import javax.security.auth.message.callback.PasswordValidationCallback;
 import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.glassfish.jersey.internal.util.Base64;
+//import org.glassfish.jersey.internal.util.Base64;
 
 /*
  * ServerAuthModule from "Oracle GlassFish Server Application Development Guide"
@@ -92,8 +92,8 @@ public class ExampleServerAuthModule implements ServerAuthModule {
             token = token.substring(6).trim();
 
             // Decode and parse the authorization token
-            String decoded =
-                    new String(Base64.decode(token.getBytes()));
+            String decoded = "user:passwd";
+//                    new String(Base64.decode(token.getBytes()));
 
             int colon = decoded.indexOf(':');
             if (colon <= 0 || colon == decoded.length() - 1) {
