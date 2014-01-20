@@ -63,7 +63,7 @@ class TestServerAuthModule implements ServerAuthModule {
         System.out.println("VALIDATING REQUEST FOR PATH: "+path+pathInfo);
         
         String userid = processRequestHeader(request);
-        
+
         if(userid == null) {
             //don't set any principals
             return AuthStatus.SUCCESS;
