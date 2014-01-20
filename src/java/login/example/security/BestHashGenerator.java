@@ -16,9 +16,9 @@ import javax.crypto.spec.PBEKeySpec;
  *
  * @author Ryan
  */
-public class BestHashGenerator {
+public class BestHashGenerator implements HashGenerator {
 
-    public String generateBestHash(String password) {
+    public String generateHash(String password) {
         return generateBestHash(password, 1000);
     }
 
@@ -43,6 +43,33 @@ public class BestHashGenerator {
 
         return null;
 
+    }
+
+    public PasswordValidator validator() {
+        return new PasswordValidator() {
+            @Override
+            public boolean isValidUser(String password, String storedPassword) {
+                try {
+                    char[] passwordAsCharArray = password.toCharArray();
+
+                    String[] params = storedPassword.split(":");
+                    int iterations = Integer.parseInt(params[0]);
+                    byte[] salt = HexUtils.fromHex(params[1]);
+                    byte[] hash = HexUtils.fromHex(params[2]);
+
+                    PBEKeySpec spec = new PBEKeySpec(passwordAsCharArray, salt, iterations, 64 * 8);
+                    SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
+                    byte[] testHash = factory.generateSecret(spec).getEncoded();
+                    return slowEquals(hash, testHash);
+                } catch (NoSuchAlgorithmException ex) {
+                    Logger.getLogger(BestHashGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvalidKeySpecException ex) {
+                    Logger.getLogger(BestHashGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                return false;
+            }
+        };
     }
 
     public static boolean slowEquals(byte[] a, byte[] b) {
