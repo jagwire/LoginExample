@@ -7,6 +7,7 @@
 package login.resources;
 
 
+import server.auth.TestServerAuthModule;
 import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
@@ -83,5 +84,14 @@ public class LoginResource {
 
         return Response.ok("YOU SO SILLY!").build();
 
+    }
+
+    @RolesAllowed("User")
+    @POST
+    @Path("/logout")
+    public Response logout() {
+        Users.logUserOut(servletRequest.getHeader(TestServerAuthModule.HEADER_NAME));
+
+        return Response.ok("logged out").build();
     }
 }

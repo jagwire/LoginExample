@@ -1,3 +1,5 @@
+package server.auth;
+
 
 import java.util.Map;
 import javax.security.auth.callback.CallbackHandler;

@@ -1,3 +1,5 @@
+package server.auth;
+
 
 import java.io.IOException;
 import java.security.Principal;
@@ -29,8 +31,8 @@ import login.example.Users;
  *
  * @author Ryan
  */
-class TestServerAuthModule implements ServerAuthModule {
-    private static final String HEADER_NAME = "EXAMPLE-AUTH";
+public class TestServerAuthModule implements ServerAuthModule {
+    public static final String HEADER_NAME = "EXAMPLE-AUTH";
     private CallbackHandler handler;
 
     public TestServerAuthModule() {
@@ -48,7 +50,7 @@ class TestServerAuthModule implements ServerAuthModule {
 
     @Override
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) throws AuthException {
-        System.out.println("INSIDE VALIDATE REQUEST!!! POOP-POOP");
+        System.out.println("INSIDE VALIDATE REQUEST!!!");
         // Normally we would check here for authentication credentials being
         // present and perform actual authentication, or in absence of those
         // ask the user in some way to authenticate.

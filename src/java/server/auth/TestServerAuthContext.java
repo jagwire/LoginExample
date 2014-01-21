@@ -1,3 +1,5 @@
+package server.auth;
+
 
 import java.util.Collections;
 import javax.security.auth.Subject;

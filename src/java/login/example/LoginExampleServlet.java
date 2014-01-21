@@ -36,7 +36,7 @@ public class LoginExampleServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        response.sendRedirect("../LoginExample/index.jsp");
+        response.sendRedirect("index.jsp");
         /*
          response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();

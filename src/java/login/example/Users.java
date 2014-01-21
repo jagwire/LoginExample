@@ -69,6 +69,11 @@ public class Users {
 
     }
 
+    public static void logUserOut(String token) {
+        System.out.println("LOGGING OUT USER WITH TOKEN: " + token);
+        SessionRepository.INSTANCE.recordsFromTokens.remove(token);
+    }
+
 
     private static enum SessionRepository {
         INSTANCE;

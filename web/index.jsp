@@ -30,6 +30,18 @@
                             });
                     console.log("SENDING SILLY REQUEST!");
                 }
+                
+            function logout() { 
+                $.ajax({
+                    url:'resources/login/logout',
+                    type: 'POST',
+                    headers: {"EXAMPLE-AUTH": access_token}
+                })
+                .done(function(msg) { console.log("RESPONSE: "+msg)})
+                                .fail(function(xhr, status, error) {
+                                    console.log("Error! Status: " + status + " error: " + error);
+                                });
+                    }
 
             function login() { 
                 var user = {username: 'jagwire', password: 'ryan'};
@@ -89,6 +101,7 @@
             <button onclick="login()">Login!</button>
             <button onclick="register()">Register!</button>
             <button onclick="silly()">Silly!</button>
+            <button onclick="logout()">Logout!</button>
 
     </body>
 </html>
