@@ -15,27 +15,65 @@
             $(document).ready(function() { 
 //                var echo = function() { console.log("ECHO!!!!!"); };
             });
-            
-            function echo() { 
+            var access_token = "";
+            function silly() {
+                $.ajax({
+                    url:'resources/login/me',
+                    type: 'POST',
+                    dataType: 'text',
+                    headers: { "EXAMPLE-AUTH": access_token}
+                })
+                .done(function(msg) { console.log("RESPONSE: " + msg)
+                            })
+                            .fail(function(xhr, status, error) {
+                                console.log("Error! Status: " + status + " error: " + error);
+                            });
+                    console.log("SENDING SILLY REQUEST!");
+                }
+
+            function login() { 
                 var user = {username: 'jagwire', password: 'ryan'};
                 
                 $.ajax({
                     url:'resources/login',
                     type: 'POST',
-                    dataType: 'json',
+                    dataType: 'text',
                     contentType: 'application/json',
                     headers: { "TESTING_AUTH": "XXXXXXXX"},
                     data: JSON.stringify(user),
                     
                 })
-                .done(function(msg) { console.log('Data Saved: '+msg)})
+                .done(function(msg) { 
+                    console.log('Data Saved: '+msg)
+                    access_token = msg;
+                    //save this token to add to headers for future requests
+                })
                 .fail(function(xhr, status, error) {
                             console.log("Error! Status: "+status+" error: "+error); 
                             console.log("Silly Header: "+xhr.getResponseHeader("BLAH"));
                     }
                  );
-                console.log("SENDING POST!");
+                console.log("SENDING LOGIN REQUEST!!");
             }
+            
+            function register() {
+                var user = {username: 'jagwire', password: 'ryan'};
+                $.ajax({
+                    url: 'resources/login/go',
+                    type: 'POST',
+                    dataType: 'text',
+                    contentType: 'application/json',
+                    data: JSON.stringify(user)
+                        })
+                                .done(function(msg) {
+                                    console.log("REGISTERED!")
+                                })
+                                .fail(function(xhr, status, error) {
+                                    console.log("Error! Status: " + status + " error: " + error);
+                                });
+                        console.log("SENDING REGISTER REQUEST!");
+                    }
+
         </script>
     </head>
     <body>
@@ -48,8 +86,9 @@
             <strong> Please enter your password:</strong>
             <input type="password" size="15" name="j_password">
             <br/><br/>
-            <button onclick="echo()">Click me!</button>
+            <button onclick="login()">Login!</button>
+            <button onclick="register()">Register!</button>
+            <button onclick="silly()">Silly!</button>
 
-       
     </body>
 </html>

@@ -6,7 +6,12 @@
 
 package login.resources;
 
+
+import javax.annotation.security.DeclareRoles;
 import javax.annotation.security.DenyAll;
+import javax.annotation.security.RolesAllowed;
+import javax.servlet.annotation.HttpConstraint;
+import javax.servlet.annotation.ServletSecurity;
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -16,16 +21,22 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.SecurityContext;
+import login.example.Users;
 import login.example.model.UserCredentials;
 
 /**
  *
  * @author ryan
  */
+@DeclareRoles({"User"})
+@ServletSecurity(
+        @HttpConstraint(transportGuarantee = ServletSecurity.TransportGuarantee.CONFIDENTIAL))
 @Path("login")
 public class LoginResource {
     
-    
+    @Context
+    private HttpServletRequest servletRequest;
     @GET
     @Produces("text/plain")
     public Response ohlala() {
@@ -33,22 +44,44 @@ public class LoginResource {
         return Response.ok("ohlala").build();
     }
 
-    @DenyAll
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("application/json")
-    public Response handleLoginCredentials(UserCredentials uc) {
+    @Path("/go")
+    public Response register(UserCredentials uc) {
 
+        Users.registerUser(uc.username, uc.password);
+
+        return Response.ok(uc).build();
+    }
+
+    // @RolesAllowed("User")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces("text/plain")
+    public Response handleLoginCredentials(UserCredentials uc) {
+        System.out.println("RECEIVED REQUEST TO LOG IN->USER: " + uc.username + " PASS: " + uc.password);
+        String token = Users.logUserIn(uc.username, uc.password);
         
         
         //validate credentials
         
         //generate token
         
-        
-        UserCredentials silly = new UserCredentials();
-        silly.username = "use";
-        silly.password = "pass";
-        return Response.ok(silly).build();
+        return Response.ok(token).build();
+    }
+
+    @RolesAllowed("User")
+    @POST
+    @Path("/me")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response sillyHandler(@Context SecurityContext sc) {
+
+        System.out.println("REQUEST SENT BY USER: " + sc.isUserInRole("User"));
+        System.out.println("REQUEST FROM: " + servletRequest.getUserPrincipal().getName());
+
+        return Response.ok("YOU SO SILLY!").build();
+
     }
 }

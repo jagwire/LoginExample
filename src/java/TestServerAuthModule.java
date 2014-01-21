@@ -1,6 +1,7 @@
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,13 +22,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.StatusType;
-import login.example.SessionRepository;
 import login.example.UserRecord;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+import login.example.Users;
 
 /**
  *
@@ -63,29 +59,42 @@ class TestServerAuthModule implements ServerAuthModule {
         String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
         System.out.println("VALIDATING REQUEST FOR PATH: "+path+pathInfo);
 
-        String userid = processRequestHeader(request);
+        //check for presence of header
+        String token = request.getHeader(HEADER_NAME);
+        if (token != null) {
+            System.out.println("HEADER EXISTS!");
+            //check validity of header
+            if (Users.tokenIsValid(token)) {
+                System.out.println("TOKEN IS VALID!");
+                UserRecord user = Users.getUserFromToken(token);
+                String[] groups = Users.getGroupsFromUser(user);
 
-        if (userid == null && pathInfo.contains("login")) {
-            System.out.println("SORRY!");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.setHeader("BLAH", "bloobloobloo");
-            response.addCookie(new Cookie("GhostsSay", "BOO!"));
-            return AuthStatus.SUCCESS;
-            //don't set any principals
-//            return AuthStatus.SUCCESS;
-        } 
-        
-        String[] userGroups = getUserGroups(userid);
-        
-        setPrincipals(clientSubject, userid, userGroups);
-   
+                System.out.println("SETTING PRINCIPALS: " + user.getUsername() + " GROUPS:" + Arrays.toString(groups));
+                setPrincipals(clientSubject, user.getUsername(), groups);
+            }
+
+        }
         return AuthStatus.SUCCESS;
+//        
+//        String userid = processRequestHeader(request);
+//
+//        if (userid == null && pathInfo.contains("login")) {
+//            System.out.println("SORRY!");
+//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+//            response.setHeader("BLAH", "bloobloobloo");
+//            response.addCookie(new Cookie("GhostsSay", "BOO!"));
+//            return AuthStatus.SUCCESS;
+//            //don't set any principals
+////            return AuthStatus.SUCCESS;
+//        } 
+//        
+//        String[] userGroups = getUserGroups(userid);
+//        
+//        setPrincipals(clientSubject, userid, userGroups);
+//   
+//        return AuthStatus.SUCCESS;
     }
 
-    private String[] getUserGroups(String userid) {
-        //TODO: query a database
-        return new String [] {"Admin"};
-    }
     
     private void setPrincipals(Subject clientSubject, String userid, String[] groups) {
                 // Create a handler (kind of directive) to add the caller principal (AKA
@@ -121,19 +130,5 @@ class TestServerAuthModule implements ServerAuthModule {
 
     @Override
     public void cleanSubject(MessageInfo messageInfo, Subject subject) throws AuthException {
-    }
-
-    private String processRequestHeader(HttpServletRequest request) {
-        String token = request.getHeader(HEADER_NAME);
-        if(token == null || token.equals(" ") || token.equals("")) {
-            return null;
-        } else {
-            //user entity should exist somewhere in a map or key-value pair ala:
-            // token->userentity
-            System.out.println("FOUND HEADER: "+HEADER_NAME+"->"+token);
-            UserRecord record = SessionRepository.INSTANCE.getUserID(token);
-            return record.getUsername();
-            
-        }
     }
 }
