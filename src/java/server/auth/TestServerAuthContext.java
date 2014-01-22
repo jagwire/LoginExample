@@ -1,6 +1,5 @@
 package server.auth;
 
-
 import java.util.Collections;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.CallbackHandler;
@@ -8,11 +7,6 @@ import javax.security.auth.message.AuthException;
 import javax.security.auth.message.AuthStatus;
 import javax.security.auth.message.MessageInfo;
 import javax.security.auth.message.config.ServerAuthContext;
-
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *

@@ -1,6 +1,5 @@
 package server.auth;
 
-
 import java.util.Map;
 import javax.security.auth.callback.CallbackHandler;
 import javax.security.auth.message.AuthException;
@@ -9,16 +8,11 @@ import javax.security.auth.message.config.AuthConfigProvider;
 import javax.security.auth.message.config.ClientAuthConfig;
 import javax.security.auth.message.config.ServerAuthConfig;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
  *
  * @author Ryan
  */
-class TestAuthConfigProvider implements AuthConfigProvider {
+public class TestAuthConfigProvider implements AuthConfigProvider {
 
     private static final String CALLBACK_HANDLER_PROPERTY_NAME = "authconfigprovider.client.callbackhandler";
     private Map<String, String> providerProperties;

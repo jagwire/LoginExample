@@ -1,14 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package login.example.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
+ *
+ * DataTransferObject to and from web client. Most likely marshalled to and from
+ * JSON.
  *
  * @author Ryan
  */

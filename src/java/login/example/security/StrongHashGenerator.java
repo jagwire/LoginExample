@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package login.example.security;
 
 import java.security.MessageDigest;
@@ -10,6 +6,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Generates hash using SHA-1, without a salt. DO NOT USE. STRONGER METHODS
+ * EXIST.
  *
  * @author Ryan
  */

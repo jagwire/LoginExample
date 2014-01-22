@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package login.example;
 
 import javax.ws.rs.ApplicationPath;
@@ -14,6 +8,8 @@ import org.glassfish.jersey.server.ResourceFinder;
 import org.glassfish.jersey.server.filter.RolesAllowedDynamicFeature;
 
 /**
+ * Needed for automatic resource discovery and enabling RolesAllowed
+ * authorization annotations
  *
  * @author Ryan
  */
@@ -24,5 +20,4 @@ public class ExampleApp extends ResourceConfig {
         packages("login.resources");
         register(RolesAllowedDynamicFeature.class);
     }
-
 }

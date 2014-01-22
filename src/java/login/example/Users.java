@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package login.example;
 
 import java.util.HashMap;
@@ -14,6 +8,9 @@ import login.example.security.PasswordValidator;
 import login.example.security.TokenGenerator;
 
 /**
+ * Weak data access object, for illustration purposes only. Used in conjunction
+ * with TestAuthModule and LoginResource. SHOULD BE REPLACED IN REAL
+ * IMPLEMENTATIONS.
  *
  * @author Ryan
  */

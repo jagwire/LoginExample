@@ -9,7 +9,6 @@ package login.resources;
 
 import server.auth.TestServerAuthModule;
 import javax.annotation.security.DeclareRoles;
-import javax.annotation.security.DenyAll;
 import javax.annotation.security.RolesAllowed;
 import javax.servlet.annotation.HttpConstraint;
 import javax.servlet.annotation.ServletSecurity;
@@ -38,10 +37,10 @@ public class LoginResource {
     
     @Context
     private HttpServletRequest servletRequest;
+
     @GET
     @Produces("text/plain")
     public Response ohlala() {
-        System.out.println("HANDLING LOGIN FROM REST SERVICE!");
         return Response.ok("ohlala").build();
     }
 
@@ -57,19 +56,12 @@ public class LoginResource {
         return Response.ok(uc).build();
     }
 
-    // @RolesAllowed("User")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces("text/plain")
     public Response handleLoginCredentials(UserCredentials uc) {
-        System.out.println("RECEIVED REQUEST TO LOG IN->USER: " + uc.username + " PASS: " + uc.password);
         String token = Users.logUserIn(uc.username, uc.password);
-        
-        
-        //validate credentials
-        
-        //generate token
-        
+
         return Response.ok(token).build();
     }
 
@@ -78,12 +70,7 @@ public class LoginResource {
     @Path("/me")
     @Produces(MediaType.TEXT_PLAIN)
     public Response sillyHandler(@Context SecurityContext sc) {
-
-        System.out.println("REQUEST SENT BY USER: " + sc.isUserInRole("User"));
-        System.out.println("REQUEST FROM: " + servletRequest.getUserPrincipal().getName());
-
         return Response.ok("YOU SO SILLY!").build();
-
     }
 
     @RolesAllowed("User")

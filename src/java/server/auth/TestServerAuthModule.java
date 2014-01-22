@@ -1,12 +1,7 @@
 package server.auth;
 
-
 import java.io.IOException;
-import java.security.Principal;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.security.auth.Subject;
 import javax.security.auth.callback.Callback;
 import javax.security.auth.callback.CallbackHandler;
@@ -18,12 +13,8 @@ import javax.security.auth.message.MessagePolicy;
 import javax.security.auth.message.callback.CallerPrincipalCallback;
 import javax.security.auth.message.callback.GroupPrincipalCallback;
 import javax.security.auth.message.module.ServerAuthModule;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.StatusType;
 import login.example.UserRecord;
 import login.example.Users;
 
@@ -50,51 +41,22 @@ public class TestServerAuthModule implements ServerAuthModule {
 
     @Override
     public AuthStatus validateRequest(MessageInfo messageInfo, Subject clientSubject, Subject serviceSubject) throws AuthException {
-        System.out.println("INSIDE VALIDATE REQUEST!!!");
-        // Normally we would check here for authentication credentials being
-        // present and perform actual authentication, or in absence of those
-        // ask the user in some way to authenticate.
-
         HttpServletRequest request = (HttpServletRequest)messageInfo.getRequestMessage();
-        HttpServletResponse response = (HttpServletResponse) messageInfo.getResponseMessage();
-        String path = request.getContextPath();
-        String pathInfo = request.getPathInfo() == null? "":request.getPathInfo();
-        System.out.println("VALIDATING REQUEST FOR PATH: "+path+pathInfo);
 
         //check for presence of header
         String token = request.getHeader(HEADER_NAME);
         if (token != null) {
-            System.out.println("HEADER EXISTS!");
+
             //check validity of header
             if (Users.tokenIsValid(token)) {
-                System.out.println("TOKEN IS VALID!");
+
                 UserRecord user = Users.getUserFromToken(token);
                 String[] groups = Users.getGroupsFromUser(user);
 
-                System.out.println("SETTING PRINCIPALS: " + user.getUsername() + " GROUPS:" + Arrays.toString(groups));
                 setPrincipals(clientSubject, user.getUsername(), groups);
             }
-
         }
         return AuthStatus.SUCCESS;
-//        
-//        String userid = processRequestHeader(request);
-//
-//        if (userid == null && pathInfo.contains("login")) {
-//            System.out.println("SORRY!");
-//            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-//            response.setHeader("BLAH", "bloobloobloo");
-//            response.addCookie(new Cookie("GhostsSay", "BOO!"));
-//            return AuthStatus.SUCCESS;
-//            //don't set any principals
-////            return AuthStatus.SUCCESS;
-//        } 
-//        
-//        String[] userGroups = getUserGroups(userid);
-//        
-//        setPrincipals(clientSubject, userid, userGroups);
-//   
-//        return AuthStatus.SUCCESS;
     }
 
     

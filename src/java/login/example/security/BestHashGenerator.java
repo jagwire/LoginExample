@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package login.example.security;
 
 import java.security.NoSuchAlgorithmException;
@@ -18,6 +14,7 @@ import javax.crypto.spec.PBEKeySpec;
  */
 public class BestHashGenerator implements HashGenerator {
 
+    @Override
     public String generateHash(String password) {
         return generateBestHash(password, 1000);
     }
@@ -42,7 +39,6 @@ public class BestHashGenerator implements HashGenerator {
         }
 
         return null;
-
     }
 
     public PasswordValidator validator() {

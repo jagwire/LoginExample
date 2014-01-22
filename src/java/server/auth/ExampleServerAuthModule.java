@@ -1,6 +1,5 @@
 package server.auth;
 
-
 import java.io.IOException;
 import java.util.Map;
 import javax.security.auth.Subject;
@@ -17,7 +16,6 @@ import javax.security.auth.message.callback.PasswordValidationCallback;
 import javax.security.auth.message.module.ServerAuthModule;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-//import org.glassfish.jersey.internal.util.Base64;
 
 /*
  * ServerAuthModule from "Oracle GlassFish Server Application Development Guide"
@@ -26,10 +24,6 @@ import javax.servlet.http.HttpServletResponse;
  * For reference only. Not used.
  */
 
-/**
- *
- * @author Ryan
- */
 public class ExampleServerAuthModule implements ServerAuthModule {
 
     protected static final Class[] supportedMessageTypes = new Class[]{
